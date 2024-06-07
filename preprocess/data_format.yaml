@@ -1,0 +1,21 @@
+tokenizer_hub_repo: "model_repo" #from hugginface
+dataset_hub_repo: "dataset_repo" #from hugginface
+hf_token_read: False ##you might need to specify a huggingface reading token to load certain tokenizers
+
+instruction_token: "###Instruction"
+Response_token: "###Response"
+context_token: "###Input" ## false if data has no column context
+
+system_prompt_context: "Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request."
+system_prompt_no_context: "Below is an instruction that describes a task. Write a response that appropriately completes the request."
+
+instruction_column_name: "instruction"
+context_column_name: "input"
+response_column_name: "response"
+output_column_name: "text"
+
+prompt_size: 4096
+test_size: 0.1
+
+hf_token_write: False ##please specify your huggingface writing token or you'll face an error
+save_dataset_hub_repo: False ##please specify the name of a dataset repo or you'll face an error

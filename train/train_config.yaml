@@ -1,0 +1,38 @@
+model_path: "hf model repo"
+new_model_path: "../models/name of new model folder"
+dataset_path: "dataset hf repo"
+instruction_token: "###Instruction"
+Response_token: "###Response"
+
+tokenizer_pad_token: 0
+tokenizer_pad_side: "right"
+load_in_4bit: true
+load_in_8bit: false
+lora_alpha_value: 16
+lora_dropout_value: 0.05
+target_modules_value:
+  - "gate_proj"
+  - "up_proj"
+  - "down_proj"
+r_value: 16
+bias_value: "none"
+num_train_epochs_value: 1
+micro_batch_size_value_: 1
+gradient_accumulation_steps_value: 16
+optim_value: "paged_adamw_8bit"
+save_steps_value: 25
+logging_steps_value: 50
+learning_rate_value: 3e-4
+weight_decay_value: 0.0
+fp16_value: true
+bf16_value: false
+warmup_steps_value: 100
+lr_scheduler_type_value: "cosine"
+push_to_hub_value: true
+hf_saving_repo: where to save model on hf
+use_wandb: true
+max_seq_length_value: 4096
+read_hub_token: "reading token"
+write_hub_token: "writing token"
+wandb_project: "weight & biases project name"
+mask_input: true

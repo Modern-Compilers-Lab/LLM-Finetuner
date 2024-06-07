@@ -1,0 +1,3 @@
+output_file_path: "results_augmented_assistant.txt"
+dataset_path: "../dataset/lamani_updated_v21_mistral_augmented_assistant"
+hf_token_read: your huggingface reading token

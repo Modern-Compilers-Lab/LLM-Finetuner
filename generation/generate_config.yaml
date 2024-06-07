@@ -1,0 +1,14 @@
+dataset_path: "hugging face dataset repo"
+model_path: "../models/finetuned model name"
+updated_dataset_path: "../dataset/dataset name"
+tokenizer_pad_token: 0
+tokenizer_pad_side: "left"
+load_in_4bit: true
+load_in_8bit: false
+do_sample_value: true
+num_beams_value: 1
+num_return_sequences_value: 1
+max_new_tokens_value: 2048
+temperature_value: 0.15
+top_p_value: 0.95
+hub_token: "your read hf token"
