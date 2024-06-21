@@ -16,9 +16,9 @@ from trl import SFTTrainer
 from trl import DataCollatorForCompletionOnlyLM
 
 from huggingface_hub import login
-
-
 import yaml
+print("Libraries loaded")
+
 
 # Define a function to load parameters from a YAML file
 def load_config_from_yaml(file_path):
