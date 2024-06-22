@@ -17,7 +17,9 @@ from trl import DataCollatorForCompletionOnlyLM
 
 from huggingface_hub import login
 import yaml
-print("Libraries loaded")
+
+
+print("Imported libs \n")
 
 
 # Define a function to load parameters from a YAML file
@@ -73,9 +75,11 @@ mask_input = config["mask_input"]
 
 
 os.environ["WANDB_PROJECT"]=wandb_project
-login(token=read_hub_token)
-print("imported libs")
 
+
+print("Loaded parameters \n")
+
+login(token=read_hub_token)
 
 new_model = new_model_path
 base_model=model_path
@@ -95,7 +99,7 @@ def replace_token(example):
   
 dataset["train"] = dataset["train"].map(replace_token, batched=True)
 
-print("dataset loaded")
+print("Dataset loaded \n")
 
 
    
@@ -112,7 +116,7 @@ quant_config = BitsAndBytesConfig(
     bnb_4bit_use_double_quant=False,
 )
 
-print("Quantization configured")
+print("Quantization configured \n")
 
 
 if load_in_4bit :
@@ -134,12 +138,12 @@ else:
     device_map="auto"
     )
 
-print("model loaded")
+
 model.config.use_cache = False
-print("model configured")
+print("Model loaded and configured \n")
 
 tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
-print("tokenizer loaded")
+print("Tokenizer loaded \n")
 bos = tokenizer.bos_token_id
 eos = tokenizer.eos_token_id
 pad = tokenizer.pad_token_id
@@ -149,7 +153,7 @@ tokenizer.pad_token_id = tokenizer_pad_token  # unk. we want this to be differen
 tokenizer.padding_side =tokenizer_pad_side
 
 
-print("tokenizer configered")
+print("Tokenizer configered \n")
 
 
 if mask_input :
@@ -164,7 +168,7 @@ else:
     collator=None
 
 
-print("collator configered")
+print("Collator configered \n")
 
 peft_params = LoraConfig(
     lora_alpha=lora_alpha_value,
@@ -175,7 +179,8 @@ peft_params = LoraConfig(
     task_type="CAUSAL_LM",
 )
 model = get_peft_model(model, peft_params)
-print("peft configered")
+
+print("Peft configered \n")
 
 
 if use_wandb:
@@ -204,9 +209,12 @@ training_params = TrainingArguments(
 )
 
 
-print("training parameteres set")
+print("Training parameteres set \n")
 
-print(dataset["train"][1])
+print(f"Example of training data: \n {dataset['train'][1]} \n")
+
+
+
 trainer = SFTTrainer(
     model=model,
     args=training_params,
@@ -218,9 +226,18 @@ trainer = SFTTrainer(
 
 )
 
-print("trainer set")
+print("Trainer set \n")
+
+print("Training begins \n")
+
+print("\n")
 
 trainer.train()
+
+print("\n")
+
+print("Training ends \n")
+
 # Push the trained model to Hugging Face Hub
 if push_to_hub_value:
     login(token=read_hub_token)
