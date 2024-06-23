@@ -11,4 +11,5 @@ num_return_sequences_value: 1
 max_new_tokens_value: 2048
 temperature_value: 0.15
 top_p_value: 0.95
+inferance_batch_size: 4
 hub_token: "your read hf token"
