@@ -4,6 +4,9 @@ from datasets import  DatasetDict, load_dataset, concatenate_datasets
 from dataset_backend import *
 import yaml
 
+print("Imported libs \n")
+
+
 # Open the YAML file
 with open("data_format.yaml", "r") as yaml_file:
     # Load the YAML data
@@ -25,6 +28,7 @@ context_column_name = config["context_column_name"]
 response_column_name = config["response_column_name"]
 output_column_name = config["output_column_name"]
 
+print("Loaded parameters \n")
 
 if config["hf_token_read"]!= False:
     login(token=config["hf_token_read"])
@@ -33,16 +37,18 @@ else:
     
 dataset = load_dataset(config["dataset_hub_repo"])
 
+print("Dataset loaded \n")
 
 tokenizer = AutoTokenizer.from_pretrained(config["tokenizer_hub_repo"])
 
+print("Tokenizer loaded \n")
 #keep only the needed columns
 if context_column_name:
     dataset = dataset.select_columns([instruction_column_name, context_column_name, response_column_name])
 else:
     dataset = dataset.select_columns([instruction_column_name, response_column_name])
         
-
+print("Pre-processing begins \n")
 ##format dataset
 dataset = dataset.map(formatting_func)
 
@@ -61,3 +67,5 @@ dataset = dataset['train'].train_test_split(test_size = config['test_size'] , sh
 login(token=config["hf_token_write"])
 
 dataset.push_to_hub(config["save_dataset_hub_repo"])
+
+print("Dataset saved \n")

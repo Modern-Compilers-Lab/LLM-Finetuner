@@ -73,11 +73,12 @@ mask_input = config["mask_input"]
 
 
 
+print("Loaded parameters \n")
 
 os.environ["WANDB_PROJECT"]=wandb_project
 
 
-print("Loaded parameters \n")
+
 
 login(token=read_hub_token)
 
@@ -100,10 +101,6 @@ def replace_token(example):
 dataset["train"] = dataset["train"].map(replace_token, batched=True)
 
 print("Dataset loaded \n")
-
-
-   
-
 
 
 
@@ -140,6 +137,7 @@ else:
 
 
 model.config.use_cache = False
+
 print("Model loaded and configured \n")
 
 tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)

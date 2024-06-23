@@ -9,8 +9,9 @@ from bert_score import BERTScorer
 from prometheus_eval import PrometheusEval
 from prometheus_eval.prompts import ABSOLUTE_PROMPT, SCORE_RUBRIC_TEMPLATE
 import yaml
-
 from huggingface_hub import login
+print("Imported libs \n")
+
 
 
 # Define a function to load parameters from a YAML file
@@ -29,7 +30,8 @@ config = load_config_from_yaml("evaluate_config.yaml")
 # Access parameters
 output_file_path = config["output_file_path"]
 dataset_path = config["dataset_path"]
-# read_token = config["hf_token_read"]
+
+print("Loaded parameters \n")
 
 
 
@@ -38,16 +40,14 @@ dataset_path = config["dataset_path"]
 
 dataset_p=load_from_disk(dataset_path)
 # dataset_p = load_dataset(dataset_path)
-
+print("Dataset loaded \n")
 
 
 machine_results_Finetuned= list(dataset_p["finetuned_answers"])
 reference_texts=list(dataset_p["output"])
-print(len(machine_results_Finetuned))
-
-print(len(reference_texts))
 
 
+print(f"An exampel of the model output (10th instruction): \n {machine_results_Finetuned[9]} \n")
 
 def extract_text(results):
     pattern = re.compile(r'Response\s*:\s*(.*)')
@@ -109,19 +109,16 @@ def calculate_bert_score(generated_answers, ground_truth, output_file):
     with open(output_file, 'a') as file:
         file.write('\n'.join(results) + '\n')
 
-# Example usage:
-# machine_results = ['generated sentence 1', 'generated sentence 2']
-# reference_texts = ['reference sentence 1', 'reference sentence 2']
-# output_file = 'evaluation_results.txt'
-# calculate_bleu_score(machine_results, reference_texts, output_file)
-# calculate_rouge_scores(machine_results, reference_texts, output_file)
-# calculate_bert_score(machine_results, reference_texts, output_file)
+
 
 
 
 # Extract text from results (i.e we will extract everything after "Response :")
 machine_results_Finetuned_Copy = extract_text(machine_results_Finetuned)
 
+print("Responses extracted \n")
+
+print(f"An exampel of extracted response (10th instruction): \n {machine_results_Finetuned_Copy[9]} \n")
 
 # Calculate BLEU score
 print("BLEU Score for Finetuned:")
@@ -140,18 +137,17 @@ calculate_bert_score(machine_results_Finetuned_Copy, reference_texts,output_file
 
 
 
-#dataset_o = dataset_o.map(replace_token, batched=True)
-#machine_results_o= list(dataset_o["base_model_answers"])
+
 machine_results_o= list(dataset_p["finetuned_answers"])
 reference_texts=list(dataset_p["output"])
 instructions_text=list(dataset_p["instruction"])
-print(len(machine_results_o))
-print(len(reference_texts))
-print(len(instructions_text))
+
 
 
 machine_results_o_Copy = extract_text(machine_results_o)
 
+
+print("LLM evaluation begins \n")
 
 judge = PrometheusEval(model_id="prometheus-eval/prometheus-7b-v2.0", absolute_grade_template=ABSOLUTE_PROMPT)
 
@@ -175,17 +171,19 @@ feedbacks, scores = judge.absolute_grade(
     rubric=rubric,
     reference_answers=reference_texts
 )
+print(f"An exampel of the score attributed to a responce (10th instruction):  {scores[9]} \n")
+print(f"An exampel of the feedback attributed to a responce (10th instruction): \n {feedbacks[9]} \n")
 
 # Calculate and print average score
 average_score = sum(scores) / len(scores)
-print(f"Average Score: {average_score:.4f}")
+print(f"Average Score: {average_score:.4f} \n")
 
 # Calculate and print percentage of scores that are 4 or 5
 num_high_scores = sum(1 for score in scores if score == 4 or score == 5)
 percentage_high_scores = (num_high_scores / len(scores))
-print(f"Percentage of Scores 4 or 5: {percentage_high_scores:.4f}%")
+print(f"Ratio of Scores 4 or 5: {percentage_high_scores:.4f} \n")
 
 # Write results to the output file
 with open(output_file_path, 'a') as file:
     file.write(f"Average Score: {average_score:.4f}\n")
-    file.write(f"Percentage of Scores 4 or 5: {percentage_high_scores:.4f}%\n")
+    file.write(f"Ratio of Scores 4 or 5: {percentage_high_scores:.4f}\n")
