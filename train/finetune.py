@@ -30,8 +30,6 @@ def load_config_from_yaml(file_path):
 
 # Load parameters from YAML file
 config = load_config_from_yaml("train_config.yaml")
-print(type(config["learning_rate_value"]))
-print(type(config["weight_decay_value"]))
 # Access parameters
 model_path = config["model_path"]
 new_model_path = config["new_model_path"]
@@ -209,7 +207,7 @@ training_params = TrainingArguments(
 
 print("Training parameteres set \n")
 
-print(f"Example of training data: \n {dataset['train'][1]} \n")
+print(f"Example of training data: \n {dataset['train'][1]['text']} \n")
 
 
 
