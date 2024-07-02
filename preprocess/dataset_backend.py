@@ -1,7 +1,25 @@
+import yaml
 
-from preprocess import sequence_length,context_token,instruction_token,Response_token
-from preprocess import instruction_column_name,context_column_name,response_column_name,output_column_name
-from preprocess import sys_prompt_context, sys_prompt_no_context
+# Open the YAML file
+with open("preprocess/data_format.yaml", "r") as yaml_file:
+    # Load the YAML data
+    config = yaml.safe_load(yaml_file)
+
+##Load configuration attributes
+
+sequence_length = config["prompt_size"]
+
+instruction_token = config["instruction_token"]
+Response_token = config["Response_token"]
+context_token = config["context_token"]
+
+sys_prompt_no_context = config["system_prompt_no_context"]
+sys_prompt_context = config["system_prompt_context"]
+
+instruction_column_name = config["instruction_column_name"]
+context_column_name = config["context_column_name"]
+response_column_name = config["response_column_name"]
+output_column_name = config["output_column_name"]
 
 def sequence_lengths(dataset_obj):
 

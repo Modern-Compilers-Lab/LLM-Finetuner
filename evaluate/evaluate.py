@@ -23,7 +23,7 @@ def load_config_from_yaml(file_path):
 
 
 # Load parameters from YAML file
-config = load_config_from_yaml("evaluate_config.yaml")
+config = load_config_from_yaml("evaluate/evaluate_config.yaml")
 
 
 
@@ -120,6 +120,8 @@ print("Responses extracted \n")
 
 print(f"An exampel of extracted response (10th instruction): \n {machine_results_Finetuned_Copy[9]} \n")
 
+print(f"An exampel of reference response (10th instruction): \n {machine_results_Finetuned_Copy[9]} \n")
+
 # Calculate BLEU score
 print("BLEU Score for Finetuned:")
 calculate_bleu_score(machine_results_Finetuned_Copy, reference_texts,output_file_path)
@@ -138,13 +140,13 @@ calculate_bert_score(machine_results_Finetuned_Copy, reference_texts,output_file
 
 
 
-machine_results_o= list(dataset_p["finetuned_answers"])
-reference_texts=list(dataset_p["output"])
 instructions_text=list(dataset_p["instruction"])
 
 
 
-machine_results_o_Copy = extract_text(machine_results_o)
+
+
+
 
 
 print("LLM evaluation begins \n")
@@ -166,7 +168,7 @@ rubric={
 
 feedbacks, scores = judge.absolute_grade(
     instructions=instructions_text,
-    responses=machine_results_o_Copy,
+    responses=machine_results_Finetuned_Copy,
     params={},
     rubric=rubric,
     reference_answers=reference_texts

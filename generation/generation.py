@@ -22,7 +22,7 @@ def load_config_from_yaml(file_path):
     return config
 
 # Load parameters from YAML file
-config = load_config_from_yaml("generate_config.yaml")
+config = load_config_from_yaml("generation/generate_config.yaml")
 
 # Access parameters
 dataset_path = config["dataset_path"]

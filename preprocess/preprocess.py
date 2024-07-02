@@ -1,14 +1,14 @@
 from huggingface_hub import login
 from transformers import AutoTokenizer
 from datasets import  DatasetDict, load_dataset, concatenate_datasets
-from dataset_backend import *
+from dataset_backend import formatting_func,reduce_prompts_size,sequence_lengths
 import yaml
 
 print("Imported libs \n")
 
 
 # Open the YAML file
-with open("data_format.yaml", "r") as yaml_file:
+with open("preprocess/data_format.yaml", "r") as yaml_file:
     # Load the YAML data
     config = yaml.safe_load(yaml_file)
 
@@ -53,10 +53,10 @@ print("Pre-processing begins \n")
 dataset = dataset.map(formatting_func)
 
 ## resize prompts 
-dataset['train'] = reduce_prompts_size(sequence_lengths(dataset['train']))
+dataset['train'] = reduce_prompts_size(sequence_lengths(dataset['train']),dataset['train'])
 
 if'test' in dataset.column_names:
-   dataset['test'] = reduce_prompts_size(sequence_lengths(dataset['test']))
+   dataset['test'] = reduce_prompts_size(sequence_lengths(dataset['test']),dataset['test'])
    #flatten both parts train and test
    dataset = DatasetDict({"train": concatenate_datasets([dataset["train"], dataset["test"]])})
 
@@ -66,6 +66,6 @@ dataset = dataset['train'].train_test_split(test_size = config['test_size'] , sh
 
 login(token=config["hf_token_write"])
 
-dataset.push_to_hub(config["save_dataset_hub_repo"])
+dataset.push_to_hub(config["save_dataset_hub_repo"],token=True)
 
 print("Dataset saved \n")
