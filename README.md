@@ -36,7 +36,7 @@ To install LLM-Finetuner, clone the repository and install the required dependen
 ```bash
 git clone https://github.com/imadken/LLM-Finetuner.git
 cd LLM-Finetuner
-pip install -r requirements.txt
+
 ```
 
 ## Usage
@@ -45,11 +45,21 @@ Follow these steps to use LLM-Finetuner for your fine-tuning tasks:
 
 ### 1. Clone the Project
 
-### 2. Install Dependencies
+### 2. setup conda env
+
+create a conda env from ```environment.yml```
 
 ```bash
-pip install -r requirements.txt
+conda env create -f environment.yml
+
+conda activate myenv
+
+conda env list
 ```
+conda activate myenv
+
+
+if you need to evaluate using LLM-based evaluation then you should switch to  ```environment-test.yml``` 
 
 ### 3. Configure the necessary Yaml files
 
